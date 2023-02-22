@@ -22,12 +22,14 @@ import org.slf4j.LoggerFactory;
 
 public class DatagenCustomSourceTask extends SourceTask {
     private static final Logger log = LoggerFactory.getLogger(DatagenCustomSourceTask.class);
-    public static final String INCREMENT_FIELD = "increment";
+//    public static final String INCREMENT_FIELD = "increment";
     public static final String POSITION_FIELD = "position";
     public static final String SCHEMA_STR = "schema.string";
     private org.apache.avro.Schema avroSchema;
     private AvroData avroData;
-    Hashtable<Integer, Long> offsets = new Hashtable<Integer, Long>();
+//    Hashtable<Integer, Long> offsets = new Hashtable<Integer, Long>();
+
+    Long offset;
     private String topicPrefix = null;
     int[] increments;
     Generator gen;
@@ -41,13 +43,12 @@ public class DatagenCustomSourceTask extends SourceTask {
     @Override
     public void start(Map<String, String> props) {
         topicPrefix = props.get(DatagenCustomSourceConnector.TOPIC_PREFIX_CONFIG);
-
-        final String incrementsString = props.get(DatagenCustomSourceConnector.INCREMENTS_CONFIG);
-        increments = Arrays.stream(incrementsString.split(",")).mapToInt(Integer::parseInt).toArray();
-        for (Integer increment : increments) {
-            offsets.put(increment, 0L);
-        }
-
+//        final String incrementsString = props.get(DatagenCustomSourceConnector.INCREMENTS_CONFIG);
+//        increments = Arrays.stream(incrementsString.split(",")).mapToInt(Integer::parseInt).toArray();
+//        for (Integer increment : increments) {
+//            offsets.put(increment, 0L);
+//        }
+        offset = 0L;
         String schemaStr = props.get(SCHEMA_STR);
         avroSchema = ConfigUtils.getSchemaFromSchemaString(schemaStr);
         this.random = new Random();
@@ -59,20 +60,20 @@ public class DatagenCustomSourceTask extends SourceTask {
     public List<SourceRecord> poll() throws InterruptedException {
 
         final ArrayList<SourceRecord> records = new ArrayList<>();
-        for (Integer increment : increments) {
-            Long offset = offsets.get(increment);
+//        for (Integer increment : increments) {
+//            Long offset = offsets.get(increment);
 
-            if (offset == 0) {
-                final Map<String, Object> storedOffset = context.offsetStorageReader()
-                        .offset(Collections.singletonMap(INCREMENT_FIELD, increment));
-                if (storedOffset != null) {
-                    // we have a stored offset, let's use this one
-                    offset = (Long) storedOffset.get(POSITION_FIELD);
-                    log.info("We found an offset for increment {} value {}", increment, offset);
-                }
-            }
+//            if (offset == 0) {
+//                final Map<String, Object> storedOffset = context.offsetStorageReader()
+//                        .offset(Collections.singletonMap(INCREMENT_FIELD, increment));
+//                if (storedOffset != null) {
+//                    // we have a stored offset, let's use this one
+//                    offset = (Long) storedOffset.get(POSITION_FIELD);
+//                    log.info("We found an offset for increment {} value {}", increment, offset);
+//                }
+//            }
 
-            final String topic = topicPrefix + increment;
+            final String topic = topicPrefix ;
             Object generatedObject = gen.generate();
             if (!(generatedObject instanceof GenericRecord)) {
                 throw new RuntimeException(String.format(
@@ -86,7 +87,7 @@ public class DatagenCustomSourceTask extends SourceTask {
 
             records.add(
                     new SourceRecord(
-                            offsetKey(increment),                 // sourcePartition
+                            null,                 // sourcePartition
                             offsetValue(++offset),                // sourceOffset
                             topic,                                // topic
                             null,                                 // partition
@@ -94,8 +95,8 @@ public class DatagenCustomSourceTask extends SourceTask {
                             messageValue                          // value
                     )
             );
-            offsets.put(increment, offset);
-        }
+//            offsets.put(increment, offset);
+//        }
 
         synchronized (this) {
             this.wait(1000);
@@ -109,9 +110,9 @@ public class DatagenCustomSourceTask extends SourceTask {
         log.trace("Stopping");
     }
 
-    private Map<String, Integer> offsetKey(int increment) {
-        return Collections.singletonMap(INCREMENT_FIELD, increment);
-    }
+//    private Map<String, Integer> offsetKey(int increment) {
+//        return Collections.singletonMap(INCREMENT_FIELD, increment);
+//    }
 
     private Map<String, Long> offsetValue(Long pos) {
         return Collections.singletonMap(POSITION_FIELD, pos);
