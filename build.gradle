@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "java"
+    id "com.github.johnrengelman.shadow" version "6.0.0"
+}
+
+//sourceCompatibility = "13"
+//targetCompatibility = "13"
+version = "0.0.1"
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compileOnly "org.apache.kafka:connect-api:2.5.0"
+    implementation 'org.apache.kafka:connect-json:2.6.0'
+    implementation 'org.apache.avro:avro:1.8.1'
+    implementation 'io.confluent.avro:avro-random-generator:0.4.1'
+    implementation 'io.confluent:kafka-connect-avro-data:5.5.1'
+    implementation 'io.confluent:kafka-connect-avro-converter:5.4.2'
+    implementation 'io.confluent:kafka-connect-protobuf-converter:6.0.1'
+    implementation 'io.confluent:kafka-connect-json-schema-converter:5.5.1'
+
+
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "java"
+
+compileJava {
+    options.compilerArgs << "-parameters"
+}
+
+shadowJar {
+    archiveBaseName = "connect-datagen-source"
+    archiveClassifier = ""
+    destinationDirectory = file("extensions")
+}

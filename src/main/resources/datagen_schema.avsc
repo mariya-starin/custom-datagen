@@ -1,0 +1,129 @@
+{
+  "name": "LineFeedRequest",
+  "type": "record",
+  "fields": [
+    {
+      "name": "MESInstance",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "regex": "[A-Z][1-9]{8,8}"
+        }
+      }
+    },
+    {
+      "name": "FacilityCode",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "MESME",
+            "MESMS",
+            "MESDT",
+            "Ignored"
+          ]
+        }
+      }
+    },
+    {
+      "name": "ActionCode",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "01",
+            "02",
+            "03"
+          ]
+        }
+      }
+    },
+    {
+      "name": "LineFeedingRequestNumber",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "regex": "MESME0000000[1-9]"
+        }
+      }
+    },
+    {
+      "name": "LineFeedingRequestItem",
+      "type": {
+        "type": "int",
+        "arg.properties": {
+          "iteration": {
+            "start": 0
+          }
+        }
+      }
+    },
+    {
+      "name": "PartNumber",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "regex": "[1-9]{7}"
+        }
+      }
+    },
+    {
+      "name": "Quantity",
+      "type": {
+        "type": "int",
+        "arg.properties": {
+          "range": {
+            "min": 1,
+            "max": 40
+          }
+        }
+      }
+    },
+    {
+      "name": "UnitOfMeasure",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "EA",
+            "MT"
+          ]
+        }
+      }
+    },
+    {
+      "name": "StagingMethod",
+      "type": {
+        "type": "int",
+        "arg.properties": {
+          "range": {
+            "min": 1,
+            "max": 10
+          }
+        }
+      }
+    },
+    {
+      "name": "MaterialFacadeLocation",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "regex": "[A-Z][1-9]{8,8}"
+        }
+      }
+    },
+    {
+      "name": "DueDate",
+      "type": {
+        "type": "long",
+        "format_as_time": "unix_long",
+        "arg.properties": {
+          "iteration": {
+            "start": 1676978539000,
+            "step": 300000
+          }
+        }
+      }
+    }
+  ]
+}
