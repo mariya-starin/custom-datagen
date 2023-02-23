@@ -24,7 +24,9 @@
 
 
     confluent local services status
+
     confluent local services connect stop
+
     confluent local services connect start
 
 
