@@ -9,6 +9,8 @@ import org.apache.avro.generic.GenericRecord;
 
 import org.json.JSONObject;
 
+// THIS CLASS FOR TESTING ONLY
+
 public class PayloadGenerator {
    Random random;
   Generator generator;
@@ -18,7 +20,7 @@ public class PayloadGenerator {
     GenericRecord rec = (GenericRecord)o;
     Schema schema = rec.getSchema();
 
-    System.out.println(o.toString());
+    System.out.println(o);
     JSONObject json = new JSONObject(o.toString()); // Convert text to object
     System.out.println(json.toString(4)); // Print it with specified indentation
     System.out.println("done");
