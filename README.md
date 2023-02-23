@@ -23,11 +23,11 @@
 - restart Kafka-connect
 
 
-    confluent local services status
-
-    confluent local services connect stop
-
-    confluent local services connect start
+      confluent local services status
+  
+      confluent local services connect stop
+  
+      confluent local services connect start
 
 
 #### Deploy
