@@ -37,8 +37,9 @@
 - In the settings on the bottom provide:
 
 
-    topic.prefix
-    schema.string
+      topic.prefix
+  
+      schema.string
 
 _NOTE:_ sample schema file and connector-config.json is available in `resources` folder.
 
